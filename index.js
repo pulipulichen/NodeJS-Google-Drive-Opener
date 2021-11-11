@@ -40,13 +40,19 @@ const openAPP = function (url) {
 argvs.forEach(f => {
   if (!f.endsWith('.gdoc')
           && !f.endsWith('.gsheet')
-          && !f.endsWith('.gslides')) {
+          && !f.endsWith('.gslides')
+          && !f.endsWith('.glink')) {
     return false
   }
   
-  let content = fs.readFileSync(f)
-  content = JSON.parse(content)
-  openAPP(content.url)
+  
+  let content = fs.readFileSync(f, 'utf8')
+  if (!content.startsWith('http')) {
+    content = JSON.parse(content)
+    content = content.url
+  }
+  
+  openAPP(content)
 })
 //openAPP('http://blog.pulipuli.info')
   
