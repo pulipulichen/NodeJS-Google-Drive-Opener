@@ -7,6 +7,11 @@ let googleChromePathList = [
   '/usr/bin/google-chrome-stable'
 ]
 
+let textEditorPathList = [
+  '/usr/bin/kate',
+  '/usr/bin/gedit'
+]
+
 //let argvs = [
 //  '/home/pudding/Desktop/QSync/test.gsheet',
 //  '/home/pudding/Desktop/QSync/test.gslides'
@@ -18,6 +23,14 @@ const getGoogleChromePath = function () {
   for (let i = 0; i < googleChromePathList.length; i++) {
     if (fs.existsSync(googleChromePathList[i])) {
       return googleChromePathList[i]
+    }
+  }
+}
+
+const getTextEditorPath = function () {
+  for (let i = 0; i < textEditorPathList.length; i++) {
+    if (fs.existsSync(textEditorPathList[i])) {
+      return textEditorPathList[i]
     }
   }
 }
@@ -37,12 +50,29 @@ const openAPP = function (url) {
   })
 }
 
+const openFile = function (url) {
+  let editorAPP = getTextEditorPath()
+  exec(`${editorAPP} "${url}"`, (error, stdout, stderr) => {
+      if (error) {
+          console.log(`error: ${error.message}`);
+          return;
+      }
+      if (stderr) {
+          console.log(`stderr: ${stderr}`);
+          return;
+      }
+      console.log(`stdout: ${stdout}`);
+  })
+}
+
 argvs.forEach(f => {
   if (!f.endsWith('.gdoc')
           && !f.endsWith('.gsheet')
           && !f.endsWith('.gslides')
           && !f.endsWith('.glink')) {
-    return false
+    // 改用預設的編輯器開啟
+    openFile(f)
+    return true
   }
   
   
