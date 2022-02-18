@@ -27,8 +27,12 @@ const getGoogleChromePath = function () {
   }
 }
 
-const getTextEditorPath = function () {
+const getTextEditorPath = function (size) {
   for (let i = 0; i < textEditorPathList.length; i++) {
+    if (textEditorPathList[i] === '/usr/bin/kate'
+            && size > 102400) {
+      continue
+    }
     if (fs.existsSync(textEditorPathList[i])) {
       return textEditorPathList[i]
     }
@@ -51,7 +55,8 @@ const openAPP = function (url) {
 }
 
 const openFile = function (url) {
-  let editorAPP = getTextEditorPath()
+  let size = fs.statSync(url).size
+  let editorAPP = getTextEditorPath(size)
   exec(`${editorAPP} "${url}"`, (error, stdout, stderr) => {
       if (error) {
           console.log(`error: ${error.message}`);
