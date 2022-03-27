@@ -4,7 +4,8 @@ const path = require('path')
 const getArgv = require('./lib/getArgv')
 
 let googleChromePathList = [
-  '/usr/bin/google-chrome-stable'
+  '/usr/bin/google-chrome-stable',
+  "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
 ]
 
 let textEditorPathList = [
@@ -22,7 +23,7 @@ let argvs = getArgv()
 const getGoogleChromePath = function () {
   for (let i = 0; i < googleChromePathList.length; i++) {
     if (fs.existsSync(googleChromePathList[i])) {
-      return googleChromePathList[i]
+      return `"${googleChromePathList[i]}"`
     }
   }
 }
